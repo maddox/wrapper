@@ -1,0 +1,11 @@
+<project name="wrapper" default="compile">
+   <target name="compile" >
+       <exec executable="/opt/flex_sdk_2/bin/mxmlc">
+           	<arg line="-output=main.swf"/>
+           	<arg line="-debug=false"/>
+			<arg line="-verbose-stacktraces=false"/>
+			<arg line="-optimize=true"/>
+			<arg line="Main.as"/>
+	   </exec>
+   </target>
+</project>

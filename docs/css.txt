@@ -1,0 +1,53 @@
+Wrappers CSS Support Documentation:
+
+CSS or Cascading Style Sheets are the standard way to make reusable styles. This basic concept has been used in many technologies but is most well know for manipulating colors and positions of elements in HTML. Wrapper uses the same basic form and structure to deal with its styles, but also adds and expands this to use things like custom shapes, fonts, filters, and events. Wrapper also has it's own layout engine that is controlled through these styles but adds and slightly changes some of the concepts that you might be familiar with. This document will go through these concepts and explain how to CSS is implemented in Wrapper.
+
+Supported CSS Syntax:
+Wrapper supports styles associated with nodes, id, and classes like this.
+
+Node Styles:
+div { } // In your CSS
+<div /> // In your HTML
+
+Id styles:
+#myObject { }
+<div id="myObject" />
+
+Class styles:
+.myClass { }
+<div class="myClass" />
+
+
+And then you can combine these styles together:
+#div { width: 100%; }
+.blue { background-color: #0000FF; }
+#box1 { height: 10px; }
+#box2 { height: 20px; }
+<div id="box1" class="blue" />
+<div id="box2" class="blue" />
+
+TODO: look into this, I think I'm doing it incorrectly
+Wrapper also does style bubbling for properties that need to be populated:
+#container { background-color: #FF9900; }
+#box {  } // it's background will be #FF9900 if you don't assign one.
+<div id="container">
+	<div id="box" />
+</div>
+
+
+Referencing styles:
+
+These wont work:
+div.myClass { }
+.myContainer #myElementStyle {} 
+.myContainer[div] {} 
+.myclass1, .myclass2 {} // TODO: this might work, I dont know
+
+But these do:
+.myClass {}
+#myElementStyle {}
+
+
+
+
+

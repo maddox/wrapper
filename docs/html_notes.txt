@@ -1,0 +1,113 @@
+With Wrapper, you can use any well-formed xhtml (html that is valid xml). The basic idea is that every tag ( <tag /> ) that is open must be closed properly. You can do this in one line <tag /> or you can have tags inside of each other like this...
+
+<tag>
+       <tag />
+</tag>
+
+Here is your basic setup:
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+       <head>
+              <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+              <title>Title</title>
+              <link rel="stylesheet" href="myStyleSheet.css" type="text/css" />
+              <script type="text/javascript" src="http://0in1.com/wrapper_assets/wrapper.js"></script>
+       </head>
+       <body onload="wrapper();">
+              <div id="content">
+                     <div id="upgrade"><a href="http://www.adobe.com/go/getflashplayer"><h1>Please upgrade your Flash Player by clicking here.</h1></a></div>
+                     <div id="flash">
+                            <!--  Everything inside of this node will be rendered in Wrapper  -->
+                     </div>
+              </div>
+       </body>
+</html>
+
+As long as you are using a valid style sheet, and have loaded the Wrapper base files, you can use the above example to build any project. In this sample document there is nothing to see at the moment but lets talk about the visual elements later.
+
+
+
+Which tags can be used? 
+Most html tags and events are supported, but Wrapper sometimes implements their functionality in a slightly different way. While respecting the importance of sticking as closely to existing standards as possible, Wrapper simplifies the process of making beautiful, accessible and cross-browser compatible websites. At this time, these are Wrapper's supported html tags. 
+
+div: 
+Div tags are the main building block of any page. Think of them as generic visual elements that can be styled or placed anywhere.
+       
+img:
+The image tag can load jpgs, pngs, gifs and swfs with the src attribute, e.g., <img src="myimage.jpg" />
+
+embed. The embed tag is used to embed and load swf files (no other type of file can be embedded into Wrapper). ie <embed src="myswf.swf" />Wrapper also supports the deprected object tag.
+
+
+form:
+To send information to the server you can use form tags. The form's action attribute is used to specify the server's location and the target attribute is used to define where the result or response from the server is sent. Target can be "_self," which means this page, "_blank" which means a new page, or a path to a element on the page starting with the word "this" which is a reference to the element that you are on currently. From there,  using "this," you can drill into child or parent elements with the tag ids, or the word "parent. e.g. "this.parent.mySiblingsName"
+       
+input:
+To submit information inside of a form to a server you must use input tags. Wrapper supports text input fields. These text fields can have name and value attributes. Name is the identification of the text field and value is the contents of the text field. You can also use hidden fields with name attributes and submit buttons. More input things are coming but we are trying to keep Wrapper's size, itself, small.
+
+link:
+Link tags in the document head can load CSS stylesheets, JSON object files and complied SWF plugins. The rel attribute is used to define what type of file is being linked to and the href is the path to the file. Link type identification is recommended but not required in Wrapper. PlugIn link tags can have a variable called scopeInit which sends scope of all functions and elements within Wrapper to the plugin when it is initialized, you can leave it out if it is not needed (i.e., nothing is sent).
+<link rel="plugin" href="/plugins/papervision3d.swf" type="application/x-shockwave-flash" scopeInit="true" />
+<link rel="objects" href="/json/objects.json" type="application/json" />
+
+Any other node is thought of as a text node. This means that nodes inside do not have any more control then what is available in a flash textField with a stylesheet, you can read more about that here.
+http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/flash/text/StyleSheet.html
+       
+In the works:
+tables (tr, td, th), A tags without text, more inputs
+
+
+
+ID's Classes and Styles:
+All tags can have id and class attributes added to them. Id's are used to identify elements so that you can access them later (to style them, for instance). IDs should only be used once per document to uniquely distinguish one element from another. Class attributes are meant to apply common style to multiple elements, also, multiple classes can be applied to each element which can come in handy. ie <div id="myBigBlueBox" class="large blue" /> In this example, "large" is a style that has defined size and "blue" is a style that has defined color, this makes for great reuse of styles. The class styles are added in order, with any later duplicate styles overriding earlier ones.  Styling applied with the id attribute also overrides stying done via the class attribute. At this time, inline styles are not supported. 
+
+
+
+The load process of a Wrapper page:
+After the html page is loaded into the browser, Wrapper is called and checks for browser plugins. If you have the Flash player Wrapper takes over the rendering.
+Wrapper first reads the head and loads the links. After all links are loaded the css parsed and saved here, in document.css
+Then the html body is rendered with the loaded styles and positions
+and then events are applied, the html is saved here, in document.html
+and the elements are all drawn relative to  an object that Wrapper creates for you called main.
+Wrapper displays your page and listens for any defined events (described next) that you may add. 
+
+
+
+Events:
+
+All of the events, listed below, can be added to any tag like this <div onclick="" /> If you write a standard function within the event attribute javascript will be called (but with no control over return values at this time). If you would like to call a method or a plugin inside an event attribute within Wrapper, itself, you can write a json(); method. Either write the JSON objects inline, or, just give the name of a JSON object and Wrapper will look for it in your loaded JSON files. You can read more about this in the JSON documentation. 
+onclick
+ondblclick
+onmousedown
+onmouseleave
+onmousemove
+onmouseout
+onmouseover
+onmouseup
+onmousewheel
+onrollout
+onrollover
+onkeydown
+onkeyup
+onkeypress
+onaddedtostage
+oncomplete
+onenterframe
+onfocus
+onblur
+onfullscreen
+onprogress
+onremoved
+onresize
+onscroll
+onselect
+onsocketdata
+onsync
+ontabindexchange
+ontextinput
+onunload
+onsubmit
+
+
+

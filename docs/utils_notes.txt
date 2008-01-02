@@ -1,0 +1,42 @@
+
+Wrapper is trying very hard to replicate everything that you can do with a standard browser, to help that out there are many methods that have been added to further this. Most of these methods are simple to get elements and utility function to check the status of things, this document will go over the current methods that Wrapper has relative to your "document" or html page that you are working with.
+
+
+Public Document Properties:
+target: The DisplayObject that is at the root of everything.
+location: The url of the current page
+html: A saved reference to the html that created the page, it is an XML object.
+css: Is an instance of a class called Css, inside it has two public properties: style which has the style object and fonts, an array that holds all loaded fonts.
+json: Holds all loaded JSON object data
+bitmaps: Holds all saved bitmap data in an array
+forms: Is an object that holds all form data.
+anchors: Holds all references to <a> tags or anchor tags out side of text nodes.
+
+
+Public Document Methods:
+link( urlStr:String, tar:String = "_self" )
+If you would like to link or change the page location to something use this method, you can send it and url string and a target of "_self" or "_blank".
+
+append( target:DisplayObject, urlStr:String )
+To load a piece of HTML into your current document and have it render inside of another element without deleting the elements that are already inside of that target element use this method. Send it a reference to the target clip and the url of the html that needs to be loaded.
+
+loadPage( target:DisplayObject, urlStr:String )
+To load a piece of HTML into your current document and have it render inside of another element while deleting the elements that are already inside of that target element use this method. Send it a reference to the target clip and the url of the html that needs to be loaded.
+
+clear( target:DisplayObject )
+To delete all the elements within a specific target use clear. It excepts a single target.
+
+updateStage( container:DisplayObjectContainer = null)
+If you change something within the document and you need for the rest of the elements on the page to redraw relative to it you will want to call updateStage when done to have everything redraw, if you call it with out arguments everything will redraw or you can pass it a target and it will only redraw what it needs.
+
+getElementById( id:String, container:DisplayObjectContainer = null ) : DisplayObject
+To find an element with a specific id you can call this method. All nodes should have unique but if they do not you can also pass the container that this id will be contained in, the container argument is expecting a reference to the element itself not a string.
+
+getElement( path:String, target:DisplayObjectContainer = null ) : DisplayObject
+ActionScript 2 had a really nice way of being able to drill through your element by saying things like "this.parent.myDesiredElement" this methods recreated this. If you need to use a reference to "this" make sure you are sending a target argument in. The path argument described the clip that your are trying to fine. Periods or dots are used to defined separation between element names and the method excepts the keywords: this, root, and parent everything else is based on id values or the actual names of the elements that are created. If you dont not specify an id a name will still be given, you can find out what that is by using traceDisplayObject() but ids should be given.
+
+traceDisplayObject()
+If you have the Flash Debug Player set up you can see traces from Wrapper, one of the useful things that you can do while testing is trace everything that has been rendered, use this method to try this out.
+
+styleToString() : String
+This method returns a formated string version of all of the css styles that have been rendered and converted, if you are having problems with syntax this might help you figure out what is being done.

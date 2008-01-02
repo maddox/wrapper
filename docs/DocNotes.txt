@@ -1,0 +1,247 @@
+
+
+
+Doc notes for version 1 of FXHTML:
+
+Description:
+When the standard doesn't do everything that you need it to, new tools have to be created. FXHTML is a wrapper for the web standards, meaning that you do everything pretty much the same way that you always have (HTML / CSS) except that with FXHTML you have more features inside of these these technologies. Also because of how this technology is wrapping these files FXHTML is 100% the same across browsers while still remaining indexable by the search engines and editable with the standard tools like dreamweaver. This also means that every web content management system already has everything it takes to use this technology. 
+
+Technical Description:
+If you take XHTML / CSS and add JSON and the power of ActionScript3 (the technology behind flex). 
+FXHTML is an extension of html
+
+
+
+		
+CSS
+you can use camel case or the normal css names with dashes ( marginLeft, margin-left )) for all multi word properties
+	Base FXHTML CSS Properties:
+	left: 0px;						10 / 10px / 10%; / left / center/ right	default: 0;
+	right: 0px; 					100 / 100px / 100%;						default: 0;
+	width: 0px;						100 / 100px / 100%;						default: 100%;
+	height: 0px;					100 / 100px / 100%;						default: 100%;
+	opacity: 0.5; 					percentage 0 to 1 scale 				default: 1;
+	rotation: 180; 					in degrees	 							default: 0;
+	scalex: 2; 						1 is 100%, 2 is 200%					default: 1;
+	scaley: 1; 						same as above 							default: 1;
+	hidden: false;  				true/false								default: false;
+	visible: true;					same as hidden switched					default: true;
+	cache-as-bitmap: false; 		this is a good idea to turn on 			default: false;
+	button-mode: false;				true/false								default: false;
+	blend-mode: "blend";			any of the flash blend modes			default: null;	
+	
+	Margins & Padding
+	margin: 8px 8px 8px 8px;		
+	margin-left: 8px;
+	margin-right: 8px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	padding: 8px 8px 8px 8px;		
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	
+	// text things
+	font-file: url("assets/fonts/MankSans.swf");
+	font-family
+	font-size
+	color
+	text-align: left/right/center
+	line-height: -30;
+	letter-spacing: 10;
+	kerning: true;
+	
+	// inside of input fields
+	displayAsPassword
+	
+	
+	//Events can be added in html or css as json
+	onclick
+	ondblclick
+	onmousedown
+	onmouseleave
+	onmousemove
+	onmouseout
+	onmouseover
+	onmouseup
+	onmousewheel
+	onrollout
+	onrollover
+	onkeydown
+	onkeyup
+	onkeypress
+	onaddedtostage
+	oncomplete
+	onenterframe
+	onfocus
+	onblur
+	onfullscreen
+	onprogress
+	onremoved
+	onresize
+	onscroll
+	onselect
+	onsocketdata
+	onsync
+	ontabindexchange
+	ontextinput
+	onunload
+		
+	Complex shape, fills and borders using json
+	
+	// Shapes, 
+	// none is really a box
+	shape: json( { "type":"none" } ); 																									
+	
+	// simple box
+	shape: json( { "type":"box" } );																									
+	
+	// circle or oval
+	shape: json( { "type":"ellipse", "w":20, "h":20 } );																				
+	
+	// rounded box, h(height) is optional
+	shape: json( { "type":"rounded", "w":20, "h":20 } ); 																				
+	
+	// rounded box with all corners different
+	shape: json( { "type":"roundedComplex", "tl":20, "tr":20, "br":20, "bl":20 } ); 													
+	
+	// polygon, octagon, triangle, whatever, you define the points
+	shape: json( { "type":"polygon", "angle":20, "points":20 } ); 																		
+	
+	// wedge or pie chart 
+	shape: json( { "type":"wedge", "startAngle":120, "arc":310, "radius":100, "yRadius":100 } );										
+	
+	// burst
+	shape: json( { "type":"burst", "angle":20, "points":20, "innerRadius":20, "outerRadius":20 } ); 									
+
+	// star 
+	shape: json( { "type":"star", "angle":20, "points":20, "innerRadius":20, "outerRadius":20 } ); 										
+		
+	// gear
+	shape: json( { "type":"gear", "angle":20, "points":20, "innerRadius":20, "outerRadius":20, "holeSides":20, "holeRadius":20 } ); 	
+		
+	// custom, define all the points
+	shape: json( { "type":"custom", "points":[{"type":"curve", "x":0, "y":0}, {"type":"curve", "x":100, "y":0}, {"type":"curve", "x":100, "y":100}, {"type":"curve", "x":0, "y":0}] } ); 	
+
+	// fills
+	background: #FF3300; 
+	background-color: #FF3300; 
+	background-image: url("assets/images/cool.jpg"); 
+	fill: json( { "type":"none" } );
+	fill: json( { "type": "solid", "color":#123456, "alpha":65 } );
+	fill: json( { "type": "gradient", "kind": "linear", "colors":[#FF3300,#FFFF00,#33FFFF], "alphas":[100,100,100], "ratios":[0,100,255], "w":100, "h":100, "r":30, "tx":0, "ty":0, "spread":"pad","interpolation":"RGB","focalpoint":1 } ); 
+	fill: json( { "type": "image", "url":"images/img.jpg" } );
+	
+	borders
+	border: json( { "type":"none" } );
+	border: json( { "type": "solid", "weight":5, "color":#123456, "alpha":65 } );
+	border: json( { "type": "gradient", "weight":5, "kind": "linear", "colors":[#FF3300,#FFFF00,#33FFFF], "alphas":[100,100,100], "ratios":[0,100,255], "w":100, "h":100, "r":30, "tx":0, "ty":0, "spread":"pad","interpolation":"RGB","focalpoint":1 } );
+		
+		
+	TODO: there is also other stuff need to fill out and test the border stuff and 
+
+HTML
+// 
+//  load html
+//  load links from html head 
+//  send css to parsers
+//  parse html body - 
+//  apply styles from css
+//  draw base elements
+//  extend elements based on element type
+
+
+	html elements
+		div
+		form 
+		input -types: text/hidden/submit
+		ul
+		li 
+		img
+		embed
+		object
+		any other node is thought of as text node
+		// tables maybe coming
+		
+	styles
+	
+	events
+		onclick
+		ondblclick
+		onmousedown
+		onmouseleave
+		onmousemove
+		onmouseout
+		onmouseover
+		onmouseup
+		onmousewheel
+		onrollout
+		onrollover
+		onkeydown
+		onkeyup
+		onkeypress
+		onaddedtostage
+		oncomplete
+		onenterframe
+		onfocus
+		onblur
+		onfullscreen
+		onprogress
+		onremoved
+		onresize
+		onscroll
+		onselect
+		onsocketdata
+		onsync
+		ontabindexchange
+		ontextinput
+		onunload
+		
+		
+		
+			
+
+Utility functions to view the dom after it has been read and converted
+		
+		
+		
+		
+		utilities 
+
+		//trace( "#box3", main.document.styleToString( main.document.css.style.getStyle("#box3") ) );
+		//trace( "box2 style\n", main.document.styleToString( main.document.getElement("root.back.main.box2")["STYLE"] ) );
+
+		// get an element from a string
+		//trace( main.docUtils.getElement("root.instance5.instance6").name );
+
+		// trace out the display object
+		//main.docUtils.traceDisplayObject();
+			
+		// trace parsed css - you can also drill into the style by going into main.document.css.style
+		//trace( main.document.css.toCSSString( main.document.css.style ) );
+		
+		// trace out the display object - you can also drill into main.document.html
+		//main.document.displayObjectToText( this );
+		
+		// trace the html which can be traversed with e4x and 
+		//trace( main.document.html.body.div.div.div.div );
+		
+		// these elements can then be found and manipulated however you see fit
+		//trace(this.getChildByName("instance3").x, "or like this", this.getChildAt(0).x );
+		
+		// from here the work flow can be set up a few different ways but you now have a 
+		// 100% accessable, standards complient flash website with all the goods of html and flash in one place.
+		// updates will be often but I'll try to keep this part, the html and the css the same.
+		// for the next phase, tranistions/animation, events and functions, percentages and resizing.
+		// you can do all of this now you just have to write it yourself
+		// button
+		//this.getChildAt(0).buttonMode = true;
+		//this.getChildAt(0).addEventListener( Event.mouseDown, clickFunction );
+		// animation 
+		//this.getChildAt(0).tween( ... ); // I recomend looking into tweener for this.
+		
+		
+		
+		
+		

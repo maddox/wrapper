@@ -1,0 +1,61 @@
+internal const flashCssProps:Array = [ "x", "y", "w", "h", "alpha", "rotation", "scaleX", "scaleY", "visible", "cacheAsBitmap", "buttonMode", "blendMode", 
+										"margin", "padding", "fill", "shape", "border", "mask", "scrollRect" ]; // "click", "doubleClick", "mouseDown", "mouseUp", "mouseMove", "mouseOut", "mouseOver", "process", "unload", "load", "enterFrame" 
+
+Element Type
+	Container
+	Shape Element
+	Text
+	form
+	input
+	
+Shape, Fill & Border
+	Shape
+		type - box, star
+		options - corners, points
+	
+	Fill
+		type - gradient, solid, image
+		grid of color, alpha, ratio
+		or image path and repeat or not
+	
+	Border
+		weight
+		type - gradient, solid
+		grid of color, alpha, ratio
+		or image path and repeat or not
+
+Position, Coordinates
+	X/Left Y/Top
+	Width Height
+	Rotation Alpha
+	ScaleX ScaleY
+	margin
+	padding
+
+Masks & scrollRect
+	masks - shape
+	scrollRect
+
+Modes, States & Caching
+	visible
+	cacheAsBitmap
+	buttonMode
+
+Blends, Filters & Transforms
+	blendMode
+	Filters
+	ColorTransform
+	MatrixTransform
+	
+Events & Methods
+	click - javascript, load, initClass, InstanceMethod, staticMethod all with arguments
+	doubleClick
+	mouseDown
+	mouseUp
+	mouseMove
+	mouseOut
+	mouseOver
+	process
+	unload
+	load
+	enterFrame

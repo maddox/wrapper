@@ -1,0 +1,163 @@
+JSON:
+In the standard HTML/CSS world, JavaScript is used to add logic and create more complicated interaction within a document. In Wrapper you can't really use javaScript in the same way. You can call javascript methods but the preferred way to do things is using a combination between JavaScript Object Notation (JSON) and compiled ActionScript 3 plugins. Actionscript 3 is actually an advanced version of the next unreleased version of JavaScript both based on ECMA Script. This document will explain the different ways that JSON is used in Wrapper and how to make your own plugins.
+
+Where JSON is used:
+The biggest use for JSON in Wrapper is for calling methods, these methods can have specific method signatures that are baked into Wrapper itself or part of your custom plugin. The simpler versions of this are used in CSS.
+
+.myClassStyle {
+	shape: json('{"type":"box"}');
+}
+
+This is a simple function call saying that the same of any element that this style is applied to will have it's shape be a box. This is very simple but the set up enables more complex called with specific data type inside like this:
+
+.myClassStyle {
+	fill: json('{"type":"gradient","kind":"linear","colors":[0,16000000],"alphas":[1,1],"ratios":[0,255],"w":1,"h":1, "r":0,"tx":0,"ty":0}'); 
+}
+
+In this example anything with this style defined will have a complex gradient fill from black to white. The colors are defined as arrays(list of values [0,1]) and the parameters themselves are all in an object defined by curly braces. Each of these methods in CSS has there own method signature and which is more defined in the CSS documentation.
+
+
+Using external JSON files:
+Because these JSON method calls can become quite long you can also move them to external files. Here's an example of the set up.
+The JSON file can be called anything but for this example, open any text editor and make a file called "objects.json".
+Inside of this file write this.
+
+{ // JSON Objects file http://0in1.com/wrapper/ ver.1
+  "actions":
+	{
+	"myMethod":  { "type":"instance", "class":"flash.display.Sprite", "method":"startDrag", "args":[ true ] }
+	},
+  "fill":
+	{
+	"black2white": {"type":"gradient","kind":"linear","colors":[0,16000000],"alphas":[1,1],"ratios":[0,255],"w":1,"h":1, "r":0,"tx":0,"ty":0}
+	}
+				
+}
+
+As you can see in this file we have a custom action given the name "myMethod", all custom methods will go into this actions object. Below this there is a fill object that has the same fill that we described above but associated with the name "black2white". Objects can be made for any property that excepts JSON. The names that are given to these objects is called by your HTML or CSS files. But before we can do that the JSON file itself needs to be loaded, to do that place this in the head of your html next to your other link tags.
+
+<link rel="objects" href="objects.json" type="application/json" />
+
+And then in your HTML and CSS you can call these methods by just calling there names.
+HTML example:
+<div onClick='json("myMethod");' />
+
+CSS example:
+.myClassStyle {
+	fill: json('black2white'); 
+}
+
+These objects are reusable and can be associated with multiple elements and styles.
+
+
+
+Making custom function calls:
+A custom method call still has a structure that has to be confined to. All custom methods have a type, the options are;
+javascript, singleton, class, instance, static, or document and are formated something like this.
+
+{ "type":"instance", "class":"flash.display.Sprite", "method":"startDrag", "args":[ true ] }
+
+JavaScript methods call any JavaScript method that has previously been included in your current document. 
+Singleton methods methods that can only be instantiated once and reference is made through a method called getInstace() 
+Class methods are methods that are called through their constructor. 
+Instance methods are need to be called on an instance of the objects themselves
+Static methods have the static keyword and are call on objects directly
+Document methods are methods that are within Wrapper being called on the document
+
+This is a very broad overview and we suggest buying a copy of Moock's ActionScript 3 book to get you started if you dont know what any of this means. 
+
+
+Here is an example of a Static method and a document method call, a custom plugin and how to tie it all together. 
+
+In your html file make something like this.
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 
+Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+		<meta http-equiv="content-type" content="text/html" charset="utf-8" />
+		<link rel="stylesheet" href="main.css" type="text/css" />
+		<script type="text/javascript" src="wrapper.js"></script>
+    </head>
+    <body onload="wrapper();">
+    	<div id="content">
+			<div id="warning"><h1>You need to upgrade your Flash Player!</h1><br/></div>
+    		<div id="flash">
+				<div id="back">
+					<div class="item1" >
+						<div class="item2" />
+					</div
+					<div class="item1" >
+						<div class="item2" />
+					</div
+				</div>
+			</div>
+    	</div>
+    </body>
+</html>
+
+In your main.css file place this:
+/* hide from ie on mac \*/
+html { height: 100%; }
+#content { height: 100%; }
+/* end hide */
+body {
+    height: 100%; margin: 0; padding: 0;
+}
+.item1 {
+	width: 30%;
+	height: 30%;
+	background: #0044FF;
+}
+.item2 {
+	width: 80%;
+	height: 80%;
+	background: #FF4400;
+}
+
+Then download flex and start an actionscript project or you can do it in Flash CS3 if you have it, and make a 
+called TweenerPlugin.as and download http://code.google.com/p/tweener/ the files from here. Make sure the Tweener files are in the same location as your TweenerPlugin.as file is and write this inside of it.
+
+package {
+	import caurina.transitions.Tweener;
+	import flash.display.Sprite;
+	
+    public class TweenerPlugin extends Sprite {
+		public var tweener:Tweener;
+        public function TweenerPlugin() { }
+    }
+}
+
+and compile this. If you need help doing this please refer to the Moock book or to google to figure out the details of how to compile. 
+If everything went well you now have a swf file. This file now needs to be brought into your html file and we have to call something on it.
+
+Change your html file to look like this.
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 
+Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+		<meta http-equiv="content-type" content="text/html" charset="utf-8" />
+		<link rel="stylesheet" href="main.css" type="text/css" />
+		<link rel="plugin" href="TweenerPlugin.swf" type="application/x-shockwave-flash" />
+		<script type="text/javascript" src="wrapper.js"></script>
+    </head>
+    <body onload="wrapper();">
+    	<div id="content">
+			<div id="warning"><h1>You need to upgrade your Flash Player!</h1><br/></div>
+    		<div id="flash">
+				<div id="back">
+					<div class="item1" onload="json('{ "type":"static", "class":"caurina.transitions.Tweener", "method":"addTween", "args":[{"type":"document", "method":"this" }, { "y":"100", "time":1 }] }');">
+						<div class="item2" />
+					</div
+				</div>
+			</div>
+    	</div>
+    </body>
+</html>
+
+As you can see we have called a method on our imported class called a method on it called addTween, we've had to define a class path so that we can locate the code that we are talking about and then sent it arguments as to where to animate "this" object to. This is a very simple example but these methods can be called on any node or style and can also use external JSON objects to make your page a little cleaner. 
+
+
+
+
