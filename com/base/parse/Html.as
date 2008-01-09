@@ -72,10 +72,10 @@ package com.base.parse {
 				// Take out doctypes and dtd info, there is some kind of bug in adobe's xml parser that adds junk to the xml and makes it unaccessible 
 				var hd:String = htmlLoader.data;
 				hd = cleanLinks( hd );
-				if( hd.substr(0, 2) == "<!" ) hd = hd.substring(hd.indexOf(">") + 1, hd.length );
-				hd = hd.split( hd.substr(hd.indexOf("<html"), hd.indexOf(">") ) ).join("<html>");
-				html = new XML( hd );
+				hd = hd.split( hd.substring(0, hd.indexOf("<head>") ) ).join("<html>");
+				hd = cleanHTML( hd );
 				org_html = html;
+				html = new XML( hd );
 				loadStyles();
 			} catch( err:Error ) {
 				fixHtml( err );
@@ -84,10 +84,35 @@ package com.base.parse {
 
 		}
 		
+		internal function cleanHTML( t:String ) :String {
+			/* these are not right
+			t = t.replace(/<img [^>]* \/>/i, RegExp(/<img * \/>/i)); 
+			t = t.replace(/<img.[^<>]+>/i, /<img.[^<>]\/+>/i); 
+			t = t.replace(/<br.[^<>]+>/i, /<br.[^<>]\/+>/i); 
+			t = t.replace(/<input.[^<>]+>/i, /<input.[^<>]\/+>/i); 
+			t = t.replace(/<link.[^<>]+>/i, /<link.[^<>]\/+>/i); 
+			*/
+			t = t.replace("<br>","<br />");
+			t = t.replace("<strong>","<b>");
+			t = t.replace("</strong>","</b>");
+			t = t.replace("<em>","<i>");
+			t = t.replace("</em>","</i>");
+			
+			return t;
+			
+		}
+		
 		internal function cleanLinks( htmlTxt:String ) : String {
 			// htmlTxt = htmlTxt.split('<a href="/').join('<a href="event:/');
 			// htmlTxt = htmlTxt.split('<a href="'+ location.substring(0, 12)).join('<a href="event:'+location.substring(0, 12));
 			return htmlTxt;
+		}
+		
+		internal function fixHtml( err:Error ) : void {
+			trace("___________________________________________________________________", org_html, "___________________________________________________________________");
+			throw new IllegalOperationError( "Your HTML is not well formed, check this out for help...\nhttp://infohound.net/tidy/ \n\n" + err.message );
+			// loop through and fix the broken tag send back to html // make my own cleaner.
+			//if( err.message == 'Error #1085: The element type "link" must be terminated by the matching end-tag "</link>"' ){ }
 		}
 
 		internal function linkProxy( ev:TextEvent ) : void {
@@ -132,22 +157,15 @@ package com.base.parse {
 
 		}
 		
-		internal function fixHtml( err:Error ) : void {
-			throw new IllegalOperationError( "Your HTML is not well formed, check this out for help...\nhttp://infohound.net/tidy/ \n\n" + err.message );
-			// loop through and fix the broken tag send back to html // make my own cleaner.
-			//if( err.message == 'Error #1085: The element type "link" must be terminated by the matching end-tag "</link>"' ){ }
-		}
-		
 		internal function loadStyles() :void {
-			links = html.head.link.length();
+			links = html.head.link.length() - 1;
 			if( links == 0 ){ throw new IllegalOperationError( "Please include at least one style sheet. Thanks. \n\n" ); }
 			loadLink( html.head.link[ linkCount++ ] );
 		}
 		
-		
 		internal function loadLink( link:XML ) :void {
 			if( link.@href ) {
-				if( link.@rel.toLowerCase() == "plugin" ) { // load swf or something					
+				if( link.@rel.toLowerCase() == "plugin" ) { // load swf or something
 					var loader:Loader = new Loader();
 					var context:LoaderContext = new LoaderContext();
 					context.applicationDomain = ApplicationDomain.currentDomain;
@@ -162,6 +180,8 @@ package com.base.parse {
 					linkLoader = new URLLoader();
 					linkLoader.addEventListener( Event.COMPLETE, linkLoaded );
 					linkLoader.load( new URLRequest( link.@href ) );
+				}else{
+					finishLinks();
 				}
 			}else{
 				loadLink( html.head.link[ linkCount++ ] );
@@ -177,6 +197,10 @@ package com.base.parse {
 				styleTxt += loadedData;
 			}
 			linkLoader.data = "";
+			finishLinks();
+		}
+		
+		internal function finishLinks() :void {
 			if( linkCount == links ){
 				if( objectTxt != "" ){
 					var decoder:JSONDecoder = new JSONDecoder( objectTxt );
@@ -185,10 +209,9 @@ package com.base.parse {
 				css = new Css( target );
 				target.addEventListener( "CSSLoaded", render );
 				css.loadcss( styleTxt );
-			}else{
+			}else if( html.head.link[ linkCount+1 ] ){
 				loadLink( html.head.link[ linkCount++ ] );
 			}
-			
 		}
 		
 		public function render( ev:Event ) :void {
@@ -360,12 +383,16 @@ package com.base.parse {
 			var objs:Object = { base:{ x:0, y:0, w:"100%", h:1, position:"auto" }, shape:{ type:"box" }, border:{ type:"none" }, fill:{ type:"none" }, margin:{ l:0, r:0, t:0, b:0 }, padding:{ l:0, r:0, t:0, b:0 } };
 			for( var prop:String in objs ) {
 				if( styles[prop] == null ){ 
+					/*
 					if( targ.name != "root1" ){
 						if( targ.BASE_STYLE[prop] == null ) styles[prop] = objs[prop];
 						else styles[prop] = targ.BASE_STYLE[prop];
+						styles[prop] = objs[prop];
 					}else{
 						styles[prop] = objs[prop];
 					}
+					*/
+					styles[prop] = objs[prop];
 				}
 			}
 			
@@ -374,12 +401,12 @@ package com.base.parse {
 				if( styles.base[p] == null ) styles.base[p] = baseObjs[p];
 			}
 
-			// populate events // TODO: make this based on if attribute starts with "on"
+			// populate events
 			if( styles.events == null ) { styles.events = new Object(); } 
 			for each(var att:XML in node.@*) {
 				var a:String = String(att.name()).toLowerCase();
-				if( a != "id" && a != "class" && a != "style" && a != "src" && a != "href" && a != "value" && a != "name" && a != "type" && a != "action" && a != "method" && a != "target" && a != "width" && a != "height" ){ // is event ie "onclick"
-					styles.events[ Attributes[ a.toLowerCase() ] ] = Attributes.cleanEvent( att.toXMLString(), json );
+				if( a.substr(0, 2) == "on" ){
+					styles.events[ Attributes[ a ] ] = Attributes.cleanEvent( att.toXMLString(), json );
 				}
 			}
 			
@@ -496,7 +523,6 @@ package com.base.parse {
 			var info:LoaderInfo = LoaderInfo(loader.contentLoaderInfo);
 			var refURLName:String = String(info.url).split('\\').join('').split(' ').join('');
 			var element:Element = loaderElementContext[refURLName.substr( refURLName.length-7, refURLName.length)];
-			trace("asdf", element.BASE_STYLE.base.w, element.BASE_STYLE.base.h)
 			if(element.BASE_STYLE.base.h == 0) {
 				element.BASE_STYLE.base.w = info.width;
 				element.BASE_STYLE.base.h = info.height;

@@ -6,13 +6,16 @@
 
 package com.base.draw {
 	
-	import flash.display.*;
+	import flash.display.Sprite;
+	import flash.display.Loader;
+	import flash.display.DisplayObjectContainer;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 	import com.base.utils.Proxy;
 	import flash.external.ExternalInterface;
 	import flash.utils.ByteArray;
+	//import com.senocular.display.TransformTool;
 	
 	public class Element extends Sprite {
 		
@@ -37,6 +40,13 @@ package com.base.draw {
 			applyActions();
 		}
 		
+/*		public function clone(obj:Object):* {
+		    var copier:ByteArray = new ByteArray();
+		    copier.writeObject(obj);
+		    copier.position = 0;
+		    return(copier.readObject());
+		}*/
+		
 		// on make we call update, it asks it's paraent if it's contents are bigger then it self.
 		public function update() : void {
 			if( this.parent.name != "root1" ){
@@ -47,7 +57,7 @@ package com.base.draw {
 				// there is a little bit of a hack here, because of the fact that if you rotate something it's real height is bigger then it's properties hight I'm trying this getBounds stuff, it is still not picking everything up so there is a 15 in there to make if from farting to much but it is'nt good.
 				if( Math.floor(this.parent.height - ( this.getBounds(this).height - this.height ) ) - 14 > Math.floor((this.parent["STYLE"].base.h + this.parent["STYLE"].margin.t) + (this.getBounds(this).height - this.height))  && !this.parent["STYLE"].scrollRect ) { // get bigger if needed
 					
-					trace(this.parent.name, Math.abs(this.parent.height + this.getBounds(this).height - this.height), Math.floor((this.parent["STYLE"].base.h + this.parent["STYLE"].margin.t) - (this.getBounds(this).height - this.height)) - 1)
+					//trace(this.parent.name, Math.abs(this.parent.height + this.getBounds(this).height - this.height), Math.floor((this.parent["STYLE"].base.h + this.parent["STYLE"].margin.t) - (this.getBounds(this).height - this.height)) - 1)
 					
 					if( typeof( orgH ) != "string" ){ // if not percentage
 						this.parent["BASE_STYLE"].base.h = this.parent.height + mar_pad; 
@@ -72,7 +82,6 @@ package com.base.draw {
 					this.parent["make"]();
 				}
 			} else {
-				trace(this.parent.name)
 				if(this.parent.height > 1 && this.parent.height > 1 && this.parent.height < 4000 ) ExternalInterface.call('resize', this.parent.height );
 			}
 			

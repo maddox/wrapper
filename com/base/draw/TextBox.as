@@ -6,16 +6,19 @@
 
 package com.base.draw {
 	
-	import flash.text.*;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import flash.text.StyleSheet;
 	import flash.display.Sprite;
 	
 	public class TextBox extends TextField {	
 		
 		public var STYLE:Object;
 		
-		public function TextBox( target:*, txt:String, ssheet:StyleSheet, s:Object, type:String = null ) {
+		public function TextBox( target:*, txt:String, ss:StyleSheet, s:Object, type:String = null ) {
 			
-			STYLE = target.STYLE;
+			STYLE = s;
 			name = "textBox";
 			if( s.multiline == "false" ) multiline = false;
 			else multiline = true;
@@ -24,11 +27,11 @@ package com.base.draw {
 			if( s.antiAliasType == "normal" ) antiAliasType = "normal";
 			else antiAliasType = "advanced";
 			if( s.border == "true" ) border = true;
-			if(!STYLE.scrollRect) autoSize = TextFieldAutoSize.LEFT;
-			this.x = STYLE.padding.l + STYLE.margin.l;
-			this.y = STYLE.padding.t + STYLE.margin.t;
-			width = target.width - STYLE.padding.l - STYLE.padding.r - STYLE.margin.l - STYLE.margin.r;
-			height = target.height - STYLE.padding.t - STYLE.padding.b - STYLE.margin.t - STYLE.margin.b;
+			if(!target.STYLE.scrollRect) autoSize = TextFieldAutoSize.LEFT;
+			this.x = target.STYLE.padding.l + STYLE.margin.l;
+			this.y = target.STYLE.padding.t + STYLE.margin.t;
+			width = target.width - s.padding.l - s.padding.r - s.margin.l - s.margin.r;
+			// height = target.height - STYLE.padding.t - STYLE.padding.b - STYLE.margin.t - STYLE.margin.b;
 			if( s.condenseWhite == "false" ) condenseWhite = false;
 			else condenseWhite = true;
 			
@@ -40,7 +43,6 @@ package com.base.draw {
 				if( s.letterSpacing ) f.letterSpacing = s.letterSpacing.split("px").join("");
 				f.rightMargin = s.padding.r;
 				f.leftMargin = s.padding.l;
-
 				if( s.displayAsPassword == "true" ) displayAsPassword = true;
 				f.font = s.fontFamily.split('"').join("");
 				f.color = Number("0x"+s.color.split("#").join(""));
@@ -50,7 +52,7 @@ package com.base.draw {
 			} else {
 				if( s.selectable == "false" ) selectable = false;
 				else selectable = true;
-				styleSheet = ssheet;
+				styleSheet = ss;
 				embedFonts = true;
 			}
 			htmlText = txt;
@@ -60,8 +62,8 @@ package com.base.draw {
 		}
 		
 		public function make() : void {
-			width = this.parent.width - this.parent["STYLE"].padding.l - this.parent["STYLE"].padding.r - STYLE.margin.l - STYLE.margin.r;
-			height = this.parent.height - this.parent["STYLE"].padding.t - this.parent["STYLE"].padding.b - STYLE.margin.t - STYLE.margin.b;
+			width = this.parent["STYLE"].base.w - this.parent["STYLE"].padding.l - this.parent["STYLE"].padding.r - STYLE.margin.l - STYLE.margin.r;
+			if( this.parent["STYLE"].base.h < this.height + STYLE.margin.t + STYLE.margin.b) this.parent["BASE_STYLE"].base.h = this.height + STYLE.margin.t + STYLE.margin.b;
 			this.parent["make"]();
 		}
 
