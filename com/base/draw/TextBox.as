@@ -53,7 +53,9 @@ package com.base.draw {
 				if( s.selectable == "false" ) selectable = false;
 				else selectable = true;
 				styleSheet = ss;
-				embedFonts = true;
+				/* modified by Enrico Heiden
+				   lookup if embedded fonts are available, if so activate enbedded fonts */
+				if (Font.enumerateFonts(false).length > 0) { embedFonts = true;	}
 			}
 			htmlText = txt;
 			
