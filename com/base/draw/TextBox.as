@@ -6,6 +6,7 @@
 
 package com.base.draw {
 	
+	import flash.text.Font;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
