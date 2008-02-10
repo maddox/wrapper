@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				xmlns:html="com.base.application.*" >
+	
+	<mx:Panel id="myApp" title="htmlwrapper flex example" width="800" height="600" verticalCenter="0" horizontalCenter="0">
+		
+		<html:FlexWrapper verticalScrollPolicy="auto" />
+
+	</mx:Panel>	
+	
+</mx:Application>

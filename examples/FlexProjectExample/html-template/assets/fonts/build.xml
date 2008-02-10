@@ -1,0 +1,9 @@
+<project name="wrapper" default="compile">
+   <target name="compile">
+       <exec executable="/opt/flex_sdk_2/bin/mxmlc">
+           	<arg line="-output=Courier_New.swf"/>
+			<arg line="Font_Courier_New.as"/>
+	   </exec>
+   </target>
+</project>
+
