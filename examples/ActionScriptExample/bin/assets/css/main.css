@@ -8,33 +8,20 @@ body {
 #frame {
 	left: center;
 	top: center;
-	width: 700px;
-	height: 60%;
-	padding: 20px;
+	width: 620px;
+	height: 520px;
+	padding: 25px;
 	background-image: url("assets/images/pattern.gif");
 	filters: json('[{ "type":"glow", "color":0, "alpha":1, "blurX":16, "blurY":16, "strength":1, "quality":1 }]');
 }
 #box {
-	width: 100%;
-	height: 80%;
+	width: 570px;
+	height: 470px;
 	background-color: #FFFFFF;
 	opacity: 0.9;
 	shape: json('{ "type":"roundedComplex", "tl":0, "tr":8, "br":8, "bl":60 }');
 }
-p {
-	font-file: url("assets/fonts/MankSans.swf");
-	font-family: "MankSans";
-	color: #FF3300;
-	font-size: 100;
-}
-
-
-
-/* these are just samples not used currently */
-.example_flash_styles {
-	button-mode: true; 
-	fill: json('{ "type":"gradient", "kind": "linear", "colors":[1100765,1600765], "alphas":[100,100], "ratios":[0,255], "w":100, "h":100, "r":70, "tx":0, "ty":0, "spread":"pad","interpolation":"RGB","focalpoint":1 }'); 
-	shape: json('{ "type":"roundedComplex", "tl":8, "tr":8, "br":0, "bl":20 }');
-	shape: json('{ "type":"star", "angle":20, "points":30, "innerRadius":45, "outerRadius":50 }'); /* the registration point is in the center of this shape */
-	filters: json('[{ "type":"glow", "color":6697728, "alpha":1, "blurX":32, "blurY":32, "strength":0.5, "quality":1 }]');
+#flexElement {
+	height: 420px;
+	overflow: hidden;
 }
