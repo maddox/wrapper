@@ -1,0 +1,6 @@
+{ // JSON Objects file http://0in1.com/fxhtml/ ver.1
+	"actions":	{
+						"sample":  { "type":"static", "class":"Goto", "method":"sample", "args":[{"type":"document", "method":"this" }]}
+					}
+				
+}
